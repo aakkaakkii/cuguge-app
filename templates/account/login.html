@@ -1,0 +1,67 @@
+{% extends "utils/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+    {% include 'utils/navbar.html' %}
+
+    {% get_providers as socialaccount_providers %}
+
+    {% if socialaccount_providers %}
+        {% comment %}        <p>{% blocktrans with site.name as site_name %}Please sign in with one
+            of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+            for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>{% endcomment %}
+
+
+
+{#        {% include "socialaccount/snippets/login_extra.html" %}#}
+
+    {% else %}
+        <p>{% blocktrans %}If you have not created an account yet, then please
+            <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+    {% endif %}
+
+    {{form.non_field_errors}}
+
+
+    <div class="d-flex justify-content-center">
+        <form class="login" method="POST" action="{% url 'account_login' %}">
+            <div class="form-group">
+
+                {% csrf_token %}
+                {#{{ form.as_p }}#}
+
+                <div class="input-group {% if form.login.errors %}has-error{% endif %}">
+                    <span class="input-group-addon glyphicon glyphicon-envelope"></span>
+                    <input type="text" name="login" placeholder="usr" autofocus="autofocus" maxlength="150" required="" id="id_login"/>
+                </div>
+
+                <div class="input-group {% if form.password.errors %}has-error{% endif %}">
+                    <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                    <input type="password" name="password" placeholder="პაროლი" required="" id="id_password"/>
+                </div>
+
+                <div class="fieldWrapper form-inline remember text-center">
+                    {{ form.remember }}
+                    <label for="id_remember" class="text-muted">Remember me</label>
+                </div>
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                {% endif %}
+            </div>
+            <a class="button secondaryAction"
+               href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+
+            <button class="primaryAction btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+            <br/>
+        <a href="{{ signup_url }}">sign up</a>
+        </form>
+    </div>
+
+
+
+{% endblock %}

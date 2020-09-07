@@ -1,0 +1,14 @@
+<div>
+    <span><a href="{% url  'index'%}"> home </a></span>
+    <span><a href="{% url  'createPost'%}"> create Post </a></span>
+    <span><a href="{% url  'account_login'%}">account_login</a></span>
+    <span><a href="{% url  'account_signup'%}">account_signup</a></span>
+
+<form method="post" action="{% url 'account_logout' %}">
+  {% csrf_token %}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  {% endif %}
+  <button type="submit"> 'Sign Out' </button>
+</form>
+</div>

@@ -1,0 +1,35 @@
+{% extends 'utils/base.html' %}
+
+{% block title %}
+    <title> index </title>
+{% endblock %}
+
+
+{% block content %}
+
+    {% include 'utils/navbar.html' %}
+
+    <div class="container">
+        <div class="row">
+            {% if post_list %}
+                {% for post in post_list %}
+                    <div class="col-12">
+                    <div class="row">
+                        <div class="col-6">
+                            <img class="img-fluid"
+                                 src="{{ post.images.first.image.url }}" alt="{{ post.images.first.image.url }}">
+                        </div>
+                        <div class="col-6">
+                            <div>{{ post.title }}</div>
+                            <div>{{ post.description }}</div>
+                            <div><a href="{% url 'post' post_id=post.id %}">more</a></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}
