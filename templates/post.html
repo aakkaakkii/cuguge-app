@@ -1,8 +1,10 @@
 {% extends 'utils/base.html' %}
-
+{% load static %}
 
 {% block title %}
     <title> post </title>
+    <link rel="stylesheet" href="{% static 'assets/lightslider/css/lightslider.min.css' %}">
+
 {% endblock %}
 
 {% block content %}
@@ -15,8 +17,16 @@
             </div>
             <div class="col-6">
                 <div>
-                    <img class="img-fluid"
-                         src="{{ post.images.first.image.url }}" alt="{{ post.images.first.image.url }}">
+                    {% if post.images %}
+
+                        <ul id="imageGallery">
+                            {% for image in post.images.all %}
+                                <li data-thumb="{{ image.image.url }}" data-src="{{ image.image.url }}">
+                                    <img class="img-fluid" src="{{ image.image.url }}" alt="{{ image.image.url }}"/>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-6">
@@ -32,7 +42,29 @@
             </div>
         </div>
     </div>
-    </div>
     <div>
     </div>
+{% endblock %}
+
+{% block end_of_page %}
+    <script src="{% static 'assets/lightslider/js/lightslider.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#imageGallery').lightSlider({
+                gallery: true,
+                item: 1,
+                loop: true,
+                adaptiveHeight:true,
+                thumbItem: 5,
+                slideMargin: 0,
+                enableDrag: false,
+                currentPagerPosition: 'left',
+                onSliderLoad: function (el) {
+                    el.lightGallery({
+                        selector: '#imageGallery .lslide'
+                    });
+                }
+            });
+        });
+    </script>
 {% endblock %}
