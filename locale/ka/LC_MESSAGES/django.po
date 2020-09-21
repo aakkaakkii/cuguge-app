@@ -156,7 +156,7 @@ msgstr ""
 #: templates/account/login.html:6 templates/account/login.html:10
 #: templates/account/login.html:43
 msgid "Sign In"
-msgstr "tttttttttttt"
+msgstr "შესვლა"
 
 #: templates/account/login.html:15
 #, python-format
@@ -181,7 +181,7 @@ msgstr ""
 
 #: templates/account/login.html:42
 msgid "Forgot Password?"
-msgstr ""
+msgstr "დაგავიწყდათ პაროლი?"
 
 #: templates/account/logout.html:5 templates/account/logout.html:8
 #: templates/account/logout.html:17
@@ -1613,4 +1613,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/views/templates/default_urlconf.html:409
 msgid "Connect, get help, or contribute"
+msgstr ""
+
+msgid "The username and/or password you specified are not correct."
 msgstr ""

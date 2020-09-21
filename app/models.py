@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from tinymce.models import HTMLField
+from tinymce import HTMLField
 from django.db.models.signals import post_delete, pre_delete
 from .utils import auto_delete_file_on_delete, auto_delete_images_on_post_delete
 
@@ -51,6 +51,7 @@ class Post(models.Model):
     is_shown = models.BooleanField(default=True)
     is_closed = models.BooleanField(default=False)
     images = models.ManyToManyField(PostImage)
+    phone = models.CharField(max_length=20, default='')
 
     def __str__(self):
         return self.title

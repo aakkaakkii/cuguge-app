@@ -1,14 +1,59 @@
-<div>
-    <span><a href="{% url  'index'%}"> home </a></span>
-    <span><a href="{% url  'createPost'%}"> create Post </a></span>
-    <span><a href="{% url  'account_login'%}">account_login</a></span>
-    <span><a href="{% url  'account_signup'%}">account_signup</a></span>
+<nav class="navbar navbar-expand-lg navbar-light cuguge_navbar">
+    <a class="navbar-brand" href="{% url  'index' %}">CUGUGE</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-<form method="post" action="{% url 'account_logout' %}">
-  {% csrf_token %}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-  {% endif %}
-  <button type="submit"> 'Sign Out' </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link {% if "posters" == request.resolver_match.url_name %}selected-nav-link{% endif %}"
+                   href="{% url  'posters' %}"> posters </a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {% if "createPost" == request.resolver_match.url_name %}selected-nav-link{% endif %}"
+                       href="{% url  'createPost' %}"> create Post </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if "profile" == request.resolver_match.url_name %}selected-nav-link{% endif %}"
+                       href="{% url 'profile' user_id=user.id %}">profile</a>
+                </li>
+                <li class="nav-item">
+                    <a id="logout" class="nav-link"
+                       href="#">Sign Out</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link {% if "account_login" == request.resolver_match.url_name %}selected-nav-link{% endif %}"
+                       href="{% url  'account_login' %}">login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if "account_signup" == request.resolver_match.url_name %}selected-nav-link{% endif %}"
+                       href="{% url  'account_signup' %}">signup</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<form id="logout_form" method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+    {% endif %}
 </form>
-</div>
+
+<script>
+    $('#logout').click(function () {
+        const form = new FormData(document.querySelector('#logout_form'));
+
+        fetch('{% url 'account_logout' %}', {
+            method: 'POST',
+            body: form,
+        }).then((response) => {
+            window.location.href = "{% url 'index' %}"
+        })
+    })
+</script>

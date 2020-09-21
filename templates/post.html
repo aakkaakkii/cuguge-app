@@ -3,22 +3,27 @@
 
 {% block title %}
     <title> post </title>
-    <link rel="stylesheet" href="{% static 'assets/lightslider/css/lightslider.min.css' %}">
+{% endblock %}
 
+{% block end_of_head %}
+    <link rel="stylesheet" href="{% static 'assets/lightslider/css/lightslider.min.css' %}">
 {% endblock %}
 
 {% block content %}
     {% include 'utils/navbar.html' %}
 
-    <div class="container">
+    <div class="container cuguge_full_post mt-5">
         <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                <h1>{{ post.title }}</h1>
+            <div class="col-12 text-center mb-3 mt-3">
+                <span class="h1">{{ post.title }}</span>
+
+                {% if user.is_authenticated and user.get_username == post.creator.user.get_username %}
+                    <a href="{% url 'editPost' post.id %}"> <i class="fa fa-edit float-right h3"></i></a>
+                {% endif %}
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6">
                 <div>
                     {% if post.images %}
-
                         <ul id="imageGallery">
                             {% for image in post.images.all %}
                                 <li data-thumb="{{ image.image.url }}" data-src="{{ image.image.url }}">
@@ -29,21 +34,29 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-6">
-                <div>
-                    {% if  post.creator.user.first_name %}
-                        {{ post.creator.user.first_name }} {{ post.creator.user.last_name }}
-                    {% else %}
-                        {{ post.creator.user }}
-                    {% endif %}
-                </div>
+            <div class="col-12 col-md-6 mt-md-4">
+                <a href="{% url 'profile' user_id=post.creator.user.id %}">
+                    <div>
+                        {% if  post.creator.user.first_name %}
+                            {{ post.creator.user.first_name }} {{ post.creator.user.last_name }}
+                        {% else %}
+                            {{ post.creator.user }}
+                        {% endif %}
+                    </div>
+                </a>
+                <div>{{ post.phone }}</div>
+
                 <div>{{ post.post_type }}</div>
+                <div>{{ post.specie }}</div>
+                <hr class="mt-md-4"/>
                 <div>{{ post.description | safe }}</div>
             </div>
         </div>
     </div>
     <div>
     </div>
+
+    {% include 'utils/footer.html' %}
 {% endblock %}
 
 {% block end_of_page %}
@@ -54,16 +67,16 @@
                 gallery: true,
                 item: 1,
                 loop: true,
-                adaptiveHeight:true,
+                adaptiveHeight: true,
                 thumbItem: 5,
                 slideMargin: 0,
                 enableDrag: false,
                 currentPagerPosition: 'left',
-                onSliderLoad: function (el) {
-                    el.lightGallery({
-                        selector: '#imageGallery .lslide'
-                    });
-                }
+                {% comment %}           onSliderLoad: function (el) {
+                               el.lightGallery({
+                                   selector: '#imageGallery .lslide'
+                               });
+                           }{% endcomment %}
             });
         });
     </script>

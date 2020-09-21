@@ -3,16 +3,24 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from app.models import Post, ExtendedUser, PostImage
-from tinymce.widgets import TinyMCE
+from app.models import Post, ExtendedUser, PostImage, Specie, PostType
+from tinymce import TinyMCE
 
 
 class PostForm(forms.ModelForm):
-    description = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}), label='')
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'cuguge_form_field form-control mt-2',
+                                                          'placeholder': 'title'}), label='')
+    phone = forms.CharField(widget=forms.TextInput(attrs={'id': 'post_form_phone', 'hidden': 'true',
+                                                          'placeholder': 'title'}), label='')
+    specie = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'cuguge_form_field form-control mt-2'}),
+                                    queryset=Specie.objects.all(), initial='1', label='')
+    post_type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'cuguge_form_field form-control mt-2 mb-2'}),
+                                       queryset=PostType.objects.all(), initial='1', label='')
 
     class Meta:
         model = Post
-        fields = ('title', 'description', 'specie', 'post_type')
+        fields = ('title', 'phone', 'specie', 'post_type', 'description')
 
 
 class RegistrationForm(UserCreationForm):

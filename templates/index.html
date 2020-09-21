@@ -1,4 +1,6 @@
 {% extends 'utils/base.html' %}
+{% load i18n %}
+
 
 {% block title %}
     <title> index </title>
@@ -9,27 +11,51 @@
 
     {% include 'utils/navbar.html' %}
 
-    <div class="container">
-        <div class="row">
-            {% if post_list %}
-                {% for post in post_list %}
-                    <div class="col-12">
-                    <div class="row">
-                        <div class="col-6">
-                            <img class="img-fluid"
-                                 src="{{ post.images.first.image.url }}" alt="{{ post.images.first.image.url }}">
-                        </div>
-                        <div class="col-6">
-                            <div>{{ post.title }}</div>
-                            <div>{{ post.description }}</div>
-                            <div><a href="{% url 'post' post_id=post.id %}">more</a></div>
-                        </div>
-                    </div>
-                {% endfor %}
+    <div class="cuguge_main_wallpaper">
+        <div class="d-flex justify-content-center cuguge_main_wallpaper_content">
+            <div class="cuguge_search">
+                <form action="{% url 'posters' %}" method="post">
+                    {% csrf_token %}
+                    <input id="search" name="search" class="cuguge_search_field"/>
+                    <button type="submit" class="btn btn-primary float-right" id="search_button">{% trans 'search' %}</button>
+                </form>
             </div>
-            {% endif %}
         </div>
     </div>
 
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12">
+                <h1 class="text-center">
+                    {% trans 'latests' %}
+                </h1>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    {% if post_list %}
+                        {% for post in post_list %}
+                            {% include 'utils/post.html' with post=post %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
+    {% include 'utils/footer.html' %}
+
+{% endblock %}
+
+{% block end_of_page %}
+    <script>
+        {% comment %}        $('#search_button').click(function () {
+                    let val = $('#search').val()
+
+                    $.ajax({
+                        url: {% url 'posters' %},
+                        type: 'POST',
+                        data: JSON.stringify({search: val}),
+                    })
+                }){% endcomment %}
+    </script>
 {% endblock %}

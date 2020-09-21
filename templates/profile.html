@@ -1,0 +1,33 @@
+{% extends 'utils/base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+    {% include 'utils/navbar.html' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div>
+                    {% if  user_info.user.first_name %}
+                        {{ user_info.user.first_name }} {{ user_info.user.last_name }}
+                    {% else %}
+                        {{ user_info }}
+                    {% endif %}
+                </div>
+
+                {% if user.is_authenticated and user.get_username == user_info.user.get_username %}
+                    <div>Edit profile</div>
+                {% endif %}
+            </div>
+            <div class="col-12">
+                {% for post in post_list %}
+                    {% include 'utils/post.html' with post=post %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% include 'utils/footer.html' %}
+{% endblock %}

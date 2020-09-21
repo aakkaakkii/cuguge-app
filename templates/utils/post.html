@@ -1,0 +1,31 @@
+<div class="col-12 mb-3 mt-3 cuguge_post">
+    <div class="row">
+        <div class="col-12 text-center d-block d-md-none">
+             <div class="cuguge_title">{{ post.title }}</div>
+        </div>
+        <div class="col-12 col-md-6  p-3">
+            <a href="{% url 'post' post_id=post.id %}">
+                <img class="img-fluid cuguge_image"
+                     src="{{ post.images.first.image.url }}" alt="{{ post.images.first.image.url }}">
+            </a>
+        </div>
+        <div class="col-12 col-md-6 p-3 pl-md-0">
+            <a href="{% url 'post' post_id=post.id %}">
+                <div class="cuguge_title d-none d-md-block pb-3">{{ post.title | truncatechars:65 }}</div>
+                <div class="cuguge_description">{{ post.description | safe | truncatechars:200 }}</div>
+            </a>
+            <hr>
+            <span class="cuguge_post_type">{{ post.post_type }}</span>
+            <span class="cuguge_timestamp float-right">{{ post.timestamp | date:'d-m-Y' }}</span>
+
+            {% comment %}            <div><a href="{% url 'profile' user_id=post.creator.user.id %}">
+                {% if  post.creator.user.first_name %}
+                    {{ post.creator.user.first_name }} {{ post.creator.user.last_name }}
+                {% else %}
+                    {{ post.creator.user }}
+                {% endif %}
+            </a></div>{% endcomment %}
+            {#            <div><a href="{% url 'post' post_id=post.id %}">more</a></div>#}
+        </div>
+    </div>
+</div>

@@ -1614,3 +1614,6 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/django/views/templates/default_urlconf.html:409
 msgid "Connect, get help, or contribute"
 msgstr ""
+
+msgid "The username and/or password you specified are not correct."
+msgstr ""

@@ -1,0 +1,122 @@
+{% extends 'utils/base.html' %}
+
+{% load i18n %}
+
+{% block title %}
+    <title> index </title>
+{% endblock %}
+
+
+{% block content %}
+
+    {% include 'utils/navbar.html' %}
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-3 mt-2">
+                <div class="form-group">
+                    <input class="cuguge_form_field form-control mt-2" id="filter_text"
+                           placeholder="{% trans 'search' %}" name="text" value="{{ filter.text }}"/>
+                    {% if species %}
+                        <select class="cuguge_form_field form-control mt-2" id="filter_specie" name="specie">
+                            <option value="" disabled selected hidden>{% trans 'specie' %}</option>
+                            {% for specie in species %}
+                                <option value="{{ specie.id }}">{{ specie.name }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                    {% if post_types %}
+                        <select class="cuguge_form_field form-control mt-2" id="filter_post_type" name="post_type">
+                            <option value="" disabled selected hidden>{% trans 'type' %}</option>
+                            {% for post_type in post_types %}
+                                <option value="{{ post_type.id }}">{{ post_type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+
+                </div>
+                <form id="filter_form" action="{% url 'posters' %}" method="post">
+                    {% csrf_token %}
+                    <input id='filter' name="filter" hidden/>
+                </form>
+                <button id="filter_form_button" class="btn btn-primary">{% trans 'search' %}</button>
+                <button id="filter_clear_button" class="btn btn-primary">{% trans 'clear filter' %}</button>
+
+            </div>
+            <div class="col-9">
+                <div class="row">
+                    {% if post_list %}
+                        {% for post in post_list %}
+                            {% include 'utils/post.html' with post=post %}
+                        {% endfor %}
+                        <div class="col-12">
+                            <nav>
+                                <ul class="pagination pagination-template d-flex justify-content-center">
+                                    {% if post_list.has_previous %}
+                                        <li class="page-item">
+                                            <a href="?{{ page_request_var }}={{ post_list.previous_page_number }}"
+                                               class="page-link">
+                                                <i class="fa fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a href="?{{ page_request_var }}={{ post_list.previous_page_number }}"
+                                               class="page-link">
+                                                {{ post_list.previous_page_number }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                    <li class="page-item"><a href="?{{ page_request_var }}={{ post_list.number }}"
+                                                             class="page-link active">{{ post_list.number }}</a></li>
+                                    {% if post_list.has_next %}
+                                        <li class="page-item">
+                                            <a href="?{{ page_request_var }}={{ post_list.next_page_number }}"
+                                               class="page-link">
+                                                {{ post_list.next_page_number }}
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a href="?{{ page_request_var }}={{ post_list.next_page_number }}"
+                                               class="page-link">
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'utils/footer.html' %}
+{% endblock %}
+
+{% block end_of_page %}
+    <script>
+        $('#filter_clear_button').click(function (e) {
+            $('#filter_text').val('')
+            $('#filter_specie').val('')
+            $('#filter_post_type').val('')
+            submitForm()
+
+        });
+
+        $('#filter_form_button').click(function (e) {
+            submitForm()
+        });
+
+        function submitForm() {
+            let filter = {
+                text: $('#filter_text').val(),
+                specie: $('#filter_specie').val(),
+                post_type: $('#filter_post_type').val(),
+            }
+
+            $('#filter').val(JSON.stringify(filter))
+            $('#filter_form').submit()
+        }
+    </script>
+{% endblock %}
